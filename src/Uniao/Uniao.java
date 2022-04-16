@@ -1,6 +1,9 @@
 
 package Uniao;
 
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+
 
 /**
  *
@@ -9,10 +12,9 @@ package Uniao;
 public class Uniao {
 
     
-    public static void main(String[] args) {
-              
-      
-       
+    public static void main(String[] args) throws ParserConfigurationException, SAXException {
+        Automato automato = new Automato("automato.jff");
+        System.out.println(automato.toString());
     }
     
 }
