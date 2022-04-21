@@ -24,11 +24,18 @@ import org.xml.sax.SAXException;
  * @author Janaina
  */
 public final class Automato {
+
     private List<Estado> estados = new ArrayList();
     private List<Transicao> transicoes = new ArrayList();
-    
+
     public Automato(String filePath) throws ParserConfigurationException, SAXException {
         this.getFromFile(filePath);
+    }
+
+    public Automato(List<Estado> estados, List<Transicao> transicao) {
+        this.setEstados(estados);
+        this.setTransicoes(transicao);
+
     }
 
     public List<Estado> getEstados() {
@@ -46,7 +53,83 @@ public final class Automato {
     public void setTransicoes(List<Transicao> transicao) {
         this.transicoes = transicao;
     }
-    
+
+    public Automato unitWith(Automato automato) {
+
+        Estado estadoInicial = new Estado(
+                "uniao0",
+                "iniciaUniao",
+                0,
+                0,
+                false,
+                true
+        );
+
+        Estado estadoFinal = new Estado(
+                "uniao1",
+                "finalizaUniao",
+                0,
+                0,
+                true,
+                false
+        );
+
+        List<Estado> estadosResultantes = new ArrayList();
+
+        List<Transicao> transicoesResultantes = new ArrayList();
+
+        estadosResultantes.add(estadoInicial);
+        estadosResultantes.add(estadoFinal);
+
+        for (int i = 0; i < this.estados.size(); i++) {
+
+            if (this.estados.get(i).isIsInicial()) {
+
+                Estado novoEstado = new Estado(
+                        "a" + this.estados.get(i).getId(),
+                        "a" + this.estados.get(i).getNome(),
+                        this.estados.get(i).getX(),
+                        this.estados.get(i).getY(),
+                        false,
+                        false
+                );
+
+                estadosResultantes.add(novoEstado);
+
+                transicoesResultantes.add(
+                        new Transicao(
+                                estadoInicial.getId(),
+                                novoEstado.getId(),
+                                ""
+                        )
+                );
+            } else if (this.estados.get(i).isIsFinal()) {
+
+                Estado novoEstado = new Estado(
+                        "a" + this.estados.get(i).getId(),
+                        "a" + this.estados.get(i).getNome(),
+                        this.estados.get(i).getX(),
+                        this.estados.get(i).getY(),
+                        false,
+                        false
+                );
+
+                transicoesResultantes.add(
+                        new Transicao(
+                                estadoFinal.getId(),
+                                novoEstado.getId(),
+                                ""
+                        )
+                );
+
+            }
+
+        }
+
+        return new Automato(estadosResultantes, transicoesResultantes); 
+
+    }
+
     public void getFromFile(String filePath) throws ParserConfigurationException, SAXException {
         try {
             File file = new File(filePath);
@@ -63,13 +146,13 @@ public final class Automato {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
 
-                    Estado estado = new Estado(  
-                      eElement.getAttribute("id"),
-                      eElement.getAttribute("name"),
-                      Float.parseFloat(eElement.getElementsByTagName("x").item(0).getTextContent()),
-                      Float.parseFloat(eElement.getElementsByTagName("y").item(0).getTextContent()),
-                      eElement.getElementsByTagName("initial").item(0) != null,
-                      eElement.getElementsByTagName("final").item(0) != null
+                    Estado estado = new Estado(
+                            eElement.getAttribute("id"),
+                            eElement.getAttribute("name"),
+                            Float.parseFloat(eElement.getElementsByTagName("x").item(0).getTextContent()),
+                            Float.parseFloat(eElement.getElementsByTagName("y").item(0).getTextContent()),
+                            eElement.getElementsByTagName("initial").item(0) != null,
+                            eElement.getElementsByTagName("final").item(0) != null
                     );
 
                     this.estados.add(estado);
@@ -86,39 +169,41 @@ public final class Automato {
                     Element eElement = (Element) nNode;
 
                     Transicao transicao = new Transicao(
-                      Integer.valueOf(eElement.getElementsByTagName("from").item(0).getTextContent()),
-                      Integer.valueOf(eElement.getElementsByTagName("to").item(0).getTextContent()),
-                      eElement.getElementsByTagName("read").item(0).getTextContent()
+                            eElement.getElementsByTagName("from").item(0).getTextContent(),
+                            eElement.getElementsByTagName("to").item(0).getTextContent(),
+                            eElement.getElementsByTagName("read").item(0).getTextContent() 
                     );
 
                     this.transicoes.add(transicao);
 
                 }
             }
-        }catch(IOException error) {
+        } catch (IOException error) {
             System.out.println(error);
         }
     }
-    
+
     @Override
     public String toString() {
         String message;
         message = "Estados:";
-        for(int i=0;i<this.estados.size();i++){ 
+        for (int i = 0; i < this.estados.size(); i++) {
             message = message + "\n" + estados.get(i).getNome();
         }
-        
+
         message = message + "\n\nTransições:";
-        for(int i=0;i<this.transicoes.size();i++){ 
-            message = message 
-                    + "\n" 
-                    + transicoes.get(i).getFrom() 
-                    + " -> " 
-                    + transicoes.get(i).getTo() 
-                    + " com " 
+        for (int i = 0; i < this.transicoes.size(); i++) {
+            message = message
+                    + "\n"
+                    + transicoes.get(i).getFrom()
+                    + " -> "
+                    + transicoes.get(i).getTo()
+                    + " com "
                     + transicoes.get(i).getInput();
         }
+
+        message = message + "\n----------------------";
         return message;
     }
-    
+
 }
