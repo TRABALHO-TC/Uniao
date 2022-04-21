@@ -113,11 +113,13 @@ public final class Automato {
                         false,
                         false
                 );
+                
+                estadosResultantes.add(novoEstado);
 
                 transicoesResultantes.add(
                         new Transicao(
-                                estadoFinal.getId(),
                                 novoEstado.getId(),
+                                estadoFinal.getId(),
                                 ""
                         )
                 );
@@ -151,8 +153,8 @@ public final class Automato {
                             eElement.getAttribute("name"),
                             Float.parseFloat(eElement.getElementsByTagName("x").item(0).getTextContent()),
                             Float.parseFloat(eElement.getElementsByTagName("y").item(0).getTextContent()),
-                            eElement.getElementsByTagName("initial").item(0) != null,
-                            eElement.getElementsByTagName("final").item(0) != null
+                            eElement.getElementsByTagName("final").item(0) != null,
+                            eElement.getElementsByTagName("initial").item(0) != null
                     );
 
                     this.estados.add(estado);
@@ -189,6 +191,8 @@ public final class Automato {
         message = "Estados:";
         for (int i = 0; i < this.estados.size(); i++) {
             message = message + "\n" + estados.get(i).getNome();
+            if(estados.get(i).isIsFinal()) message = message + " - Final\n";
+            if(estados.get(i).isIsInicial()) message = message + " - Inicial";
         }
 
         message = message + "\n\nTransições:";
