@@ -113,7 +113,7 @@ public final class Automato {
                         false,
                         false
                 );
-                
+
                 estadosResultantes.add(novoEstado);
 
                 transicoesResultantes.add(
@@ -124,11 +124,27 @@ public final class Automato {
                         )
                 );
 
-            }
+            } else {
 
+                Estado novoEstado = new Estado(
+                        "a" + this.estados.get(i).getId(),
+                        "a" + this.estados.get(i).getNome(),
+                        this.estados.get(i).getX(),
+                        this.estados.get(i).getY(),
+                        false,
+                        false
+                );
+
+                estadosResultantes.add(novoEstado);
+
+            }
         }
 
-        return new Automato(estadosResultantes, transicoesResultantes); 
+        for (int i = 0; i < this.transicoes.size(); i++) { 
+            transicoesResultantes.add(this.transicoes.get(i));
+        }
+
+        return new Automato(estadosResultantes, transicoesResultantes);
 
     }
 
@@ -173,7 +189,7 @@ public final class Automato {
                     Transicao transicao = new Transicao(
                             eElement.getElementsByTagName("from").item(0).getTextContent(),
                             eElement.getElementsByTagName("to").item(0).getTextContent(),
-                            eElement.getElementsByTagName("read").item(0).getTextContent() 
+                            eElement.getElementsByTagName("read").item(0).getTextContent()
                     );
 
                     this.transicoes.add(transicao);
@@ -191,8 +207,12 @@ public final class Automato {
         message = "Estados:";
         for (int i = 0; i < this.estados.size(); i++) {
             message = message + "\n" + estados.get(i).getNome();
-            if(estados.get(i).isIsFinal()) message = message + " - Final\n";
-            if(estados.get(i).isIsInicial()) message = message + " - Inicial";
+            if (estados.get(i).isIsFinal()) {
+                message = message + " - Final\n";
+            }
+            if (estados.get(i).isIsInicial()) {
+                message = message + " - Inicial";
+            }
         }
 
         message = message + "\n\nTransições:";
