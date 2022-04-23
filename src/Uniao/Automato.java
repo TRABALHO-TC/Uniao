@@ -140,7 +140,7 @@ public final class Automato {
             }
         }
 
-        for (int i = 0; i < this.transicoes.size(); i++) {
+        for (int i = 0; i < this.transicoes.size(); i++) { 
             Transicao transicao = new Transicao(
                     "a" + this.transicoes.get(i).getFrom(),
                     "a" + this.transicoes.get(i).getTo(),

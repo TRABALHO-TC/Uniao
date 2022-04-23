@@ -17,7 +17,7 @@ public class Uniao {
 
         System.out.println("\n==================================================");
 
-        System.out.println(automato.unitWith(automato2).toString());
+        System.out.println(automato.unitWith(automato2).toString()); // AQUI A EXPORTAÇÃO DO ARQUIVO
 
     }
 
