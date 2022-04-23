@@ -140,8 +140,86 @@ public final class Automato {
             }
         }
 
-        for (int i = 0; i < this.transicoes.size(); i++) { 
-            transicoesResultantes.add(this.transicoes.get(i));
+        for (int i = 0; i < this.transicoes.size(); i++) {
+            Transicao transicao = new Transicao(
+                    "a" + this.transicoes.get(i).getFrom(),
+                    "a" + this.transicoes.get(i).getTo(),
+                    this.transicoes.get(i).getInput()
+            );
+
+            transicoesResultantes.add(transicao);
+
+        }
+
+        for (int i = 0; i < automato.getEstados().size(); i++) {
+
+            if (automato.getEstados().get(i).isIsInicial()) {
+
+                Estado novoEstado = new Estado(
+                        "b" + automato.getEstados().get(i).getId(),
+                        "b" + automato.getEstados().get(i).getNome(),
+                        automato.getEstados().get(i).getX(),
+                        automato.getEstados().get(i).getY(),
+                        false,
+                        false
+                );
+
+                estadosResultantes.add(novoEstado);
+
+                transicoesResultantes.add(
+                        new Transicao(
+                                estadoInicial.getId(),
+                                novoEstado.getId(),
+                                ""
+                        )
+                );
+            } else if (automato.getEstados().get(i).isIsFinal()) {
+
+                Estado novoEstado = new Estado(
+                        "b" + automato.getEstados().get(i).getId(),
+                        "b" + automato.getEstados().get(i).getNome(),
+                        automato.getEstados().get(i).getX(),
+                        automato.getEstados().get(i).getY(),
+                        false,
+                        false
+                );
+
+                estadosResultantes.add(novoEstado);
+
+                transicoesResultantes.add(
+                        new Transicao(
+                                novoEstado.getId(),
+                                estadoFinal.getId(),
+                                ""
+                        )
+                );
+
+            } else {
+
+                Estado novoEstado = new Estado(
+                        "b" + automato.getEstados().get(i).getId(),
+                        "b" + automato.getEstados().get(i).getNome(),
+                        automato.getEstados().get(i).getX(),
+                        automato.getEstados().get(i).getY(),
+                        false,
+                        false
+                );
+
+                estadosResultantes.add(novoEstado);
+
+            }
+        }
+
+        for (int i = 0; i < automato.getTransicoes().size(); i++) {
+
+            Transicao transicao = new Transicao(
+                    "b" + automato.getTransicoes().get(i).getFrom(),
+                    "b" + automato.getTransicoes().get(i).getTo(),
+                    automato.getTransicoes().get(i).getInput()
+            );
+
+            transicoesResultantes.add(transicao);
+
         }
 
         return new Automato(estadosResultantes, transicoesResultantes);
