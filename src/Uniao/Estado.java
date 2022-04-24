@@ -9,6 +9,7 @@ package Uniao;
  * @author Janaina
  */
 public class Estado {
+
     private String nome;
     private String id;
     private float x;
@@ -56,5 +57,21 @@ public class Estado {
     public void setId(String id) {
         this.id = id;
     }
-    
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getX() {
+        return this.x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getY() {
+        return this.y;
+    }
+
 }
