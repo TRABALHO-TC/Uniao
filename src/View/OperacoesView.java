@@ -5,6 +5,7 @@
 package View;
 
 import Uniao.Automato;
+import Uniao.CriarXML;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -166,8 +167,8 @@ public class OperacoesView extends javax.swing.JFrame {
             System.out.println(automato2.toString());
 
             System.out.println("\n==================================================");
-
-            System.out.println(automato.unitWith(automato2).toString()); // AQUI A EXPORTAÇÃO DO ARQUIVO
+            CriarXML criar = new CriarXML();
+            criar.gerarXML(automato.unitWith(automato2)); // AQUI A EXPORTAÇÃO DO ARQUIVO
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(OperacoesView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
