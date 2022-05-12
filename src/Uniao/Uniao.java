@@ -16,8 +16,8 @@ public class Uniao {
         System.out.println(automato2.toString());
 
         System.out.println("\n==================================================");
-
-        System.out.println(automato.unitWith(automato2).toString()); // AQUI A EXPORTAÇÃO DO ARQUIVO
+        CriarXML criar = new CriarXML();
+        criar.gerarXML(automato.unitWith(automato2)); // AQUI A EXPORTAÇÃO DO ARQUIVO
 
     }
 
