@@ -48,7 +48,7 @@ public class CriarXML {
                 Attr id = documentXML.createAttribute("id");
                 Attr name = documentXML.createAttribute("name");
                 
-                id.setValue(a1.getEstados().get(i).getId());
+                id.setValue(Integer.toString(a1.getEstados().get(i).getId()));
                 name.setValue(a1.getEstados().get(i).getNome());
                 
                 state.setAttributeNode(id);
@@ -80,11 +80,11 @@ public class CriarXML {
                 Element transition = documentXML.createElement("transition");
                 
                 Element from = documentXML.createElement("from");
-                from.appendChild(documentXML.createTextNode(String.valueOf(a1.getTransicoes().get(j).getFrom())));
+                from.appendChild(documentXML.createTextNode(Integer.toString(a1.getTransicoes().get(j).getFrom())));
                 transition.appendChild(from);
                 
                 Element to = documentXML.createElement("to");
-                to.appendChild(documentXML.createTextNode(String.valueOf(a1.getTransicoes().get(j).getTo())));
+                to.appendChild(documentXML.createTextNode(Integer.toString(a1.getTransicoes().get(j).getTo())));
                 transition.appendChild(to);
                 
                 Element read = documentXML.createElement("read");

@@ -10,6 +10,7 @@ import java.util.List;
 
 import java.io.File;
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,177 +54,62 @@ public final class Automato {
     public void setTransicoes(List<Transicao> transicao) {
         this.transicoes = transicao;
     }
-
-    public Automato unitWith(Automato automato) {
-
-        Estado estadoInicial = new Estado(
-                "uniao0",
-                "iniciaUniao",
-                0,
-                0,
-                false,
-                true
-        );
-
-        Estado estadoFinal = new Estado(
-                "uniao1",
-                "finalizaUniao",
-                0,
-                0,
-                true,
-                false
-        );
-
-        List<Estado> estadosResultantes = new ArrayList();
-
-        List<Transicao> transicoesResultantes = new ArrayList();
-
-        estadosResultantes.add(estadoInicial);
-        estadosResultantes.add(estadoFinal);
-
-        for (int i = 0; i < this.estados.size(); i++) {
-
-            if (this.estados.get(i).isIsInicial()) {
-
-                Estado novoEstado = new Estado(
-                        "a" + this.estados.get(i).getId(),
-                        "a" + this.estados.get(i).getNome(),
-                        this.estados.get(i).getX(),
-                        this.estados.get(i).getY(),
-                        false,
-                        false
-                );
-
-                estadosResultantes.add(novoEstado);
-
-                transicoesResultantes.add(
-                        new Transicao(
-                                estadoInicial.getId(),
-                                novoEstado.getId(),
-                                ""
-                        )
-                );
-            } else if (this.estados.get(i).isIsFinal()) {
-
-                Estado novoEstado = new Estado(
-                        "a" + this.estados.get(i).getId(),
-                        "a" + this.estados.get(i).getNome(),
-                        this.estados.get(i).getX(),
-                        this.estados.get(i).getY(),
-                        false,
-                        false
-                );
-
-                estadosResultantes.add(novoEstado);
-
-                transicoesResultantes.add(
-                        new Transicao(
-                                novoEstado.getId(),
-                                estadoFinal.getId(),
-                                ""
-                        )
-                );
-
-            } else {
-
-                Estado novoEstado = new Estado(
-                        "a" + this.estados.get(i).getId(),
-                        "a" + this.estados.get(i).getNome(),
-                        this.estados.get(i).getX(),
-                        this.estados.get(i).getY(),
-                        false,
-                        false
-                );
-
-                estadosResultantes.add(novoEstado);
-
+    
+    public Automato unir(Automato a1, Automato a2){
+        List<Estado> estadosUniao = new ArrayList();
+        List<Transicao> transicaoUniao = new ArrayList();
+        
+        int maiorID = 0;
+        
+        for(int i=0; i<a1.getEstados().size(); i++){
+            //adiciona os estados de a1 a lista de estados do novo automato
+            estadosUniao.add(a1.getEstados().get(i));
+            //pega o maior id do automato 1 para os ids do automato 2 começar a partir dele
+            if(a1.getEstados().get(i).getId() > maiorID)
+                maiorID = a1.getEstados().get(i).getId();
+        }
+        System.out.println("Maior id:" + maiorID);
+        //altera os ids do automato 2
+        for(int i=0; i<a2.getEstados().size(); i++){
+            a2.getEstados().get(i).setId(a2.getEstados().get(i).getId()+maiorID+1);  //Mais 1 pq o próximo começa com 0
+            //adiciona os estados de a2 a lista de estados do novo automato
+            estadosUniao.add(a2.getEstados().get(i));
+        }
+        //adiciona as transições de a1 a lista de transições do novo automato
+        for(int j=0; j<a1.getTransicoes().size(); j++){
+            transicaoUniao.add(a1.getTransicoes().get(j));
+        }
+        //altera o id das transições do automato 2
+        for(int j=0; j<a2.getTransicoes().size(); j++){
+            a2.getTransicoes().get(j).setFrom(a2.getTransicoes().get(j).getFrom()+maiorID+1);
+            a2.getTransicoes().get(j).setTo(a2.getTransicoes().get(j).getTo()+maiorID+1);
+            //adiciona as transições de a2 a lista de transições do novo automato
+            transicaoUniao.add(a2.getTransicoes().get(j));
+        }
+        
+        //Verifica qual maior id do novo automato
+        maiorID = 0;
+        for(int j=0; j<estadosUniao.size(); j++){
+            if(estadosUniao.get(j).getId() > maiorID)
+                maiorID = estadosUniao.get(j).getId();
+        }
+        
+        //Cria o novo estado inicial
+        Estado estadoInicial = new Estado(maiorID+1, "iniUniao", 0, 0, false, true);
+        
+        estadosUniao.add(estadoInicial);
+        //Pegamos até o tamanho-1 para não incluir o estado inicial que acabamos de adicionar
+        for(int j=0; j<estadosUniao.size()-1; j++){
+            if(estadosUniao.get(j).isIsInicial()){
+                estadosUniao.get(j).setIsInicial(false);
+                Transicao t1 = new Transicao(maiorID+1, estadosUniao.get(j).getId(), "");
+                transicaoUniao.add(t1);
             }
         }
-
-        for (int i = 0; i < this.transicoes.size(); i++) { 
-            Transicao transicao = new Transicao(
-                    "a" + this.transicoes.get(i).getFrom(),
-                    "a" + this.transicoes.get(i).getTo(),
-                    this.transicoes.get(i).getInput()
-            );
-
-            transicoesResultantes.add(transicao);
-
-        }
-
-        for (int i = 0; i < automato.getEstados().size(); i++) {
-
-            if (automato.getEstados().get(i).isIsInicial()) {
-
-                Estado novoEstado = new Estado(
-                        "b" + automato.getEstados().get(i).getId(),
-                        "b" + automato.getEstados().get(i).getNome(),
-                        automato.getEstados().get(i).getX(),
-                        automato.getEstados().get(i).getY(),
-                        false,
-                        false
-                );
-
-                estadosResultantes.add(novoEstado);
-
-                transicoesResultantes.add(
-                        new Transicao(
-                                estadoInicial.getId(),
-                                novoEstado.getId(),
-                                ""
-                        )
-                );
-            } else if (automato.getEstados().get(i).isIsFinal()) {
-
-                Estado novoEstado = new Estado(
-                        "b" + automato.getEstados().get(i).getId(),
-                        "b" + automato.getEstados().get(i).getNome(),
-                        automato.getEstados().get(i).getX(),
-                        automato.getEstados().get(i).getY(),
-                        false,
-                        false
-                );
-
-                estadosResultantes.add(novoEstado);
-
-                transicoesResultantes.add(
-                        new Transicao(
-                                novoEstado.getId(),
-                                estadoFinal.getId(),
-                                ""
-                        )
-                );
-
-            } else {
-
-                Estado novoEstado = new Estado(
-                        "b" + automato.getEstados().get(i).getId(),
-                        "b" + automato.getEstados().get(i).getNome(),
-                        automato.getEstados().get(i).getX(),
-                        automato.getEstados().get(i).getY(),
-                        false,
-                        false
-                );
-
-                estadosResultantes.add(novoEstado);
-
-            }
-        }
-
-        for (int i = 0; i < automato.getTransicoes().size(); i++) {
-
-            Transicao transicao = new Transicao(
-                    "b" + automato.getTransicoes().get(i).getFrom(),
-                    "b" + automato.getTransicoes().get(i).getTo(),
-                    automato.getTransicoes().get(i).getInput()
-            );
-
-            transicoesResultantes.add(transicao);
-
-        }
-
-        return new Automato(estadosResultantes, transicoesResultantes);
-
+        
+        Automato autUniao = new Automato(estadosUniao, transicaoUniao);
+        
+        return autUniao;
     }
 
     public void getFromFile(String filePath) throws ParserConfigurationException, SAXException {
@@ -243,7 +129,7 @@ public final class Automato {
                     Element eElement = (Element) nNode;
 
                     Estado estado = new Estado(
-                            eElement.getAttribute("id"),
+                            parseInt(eElement.getAttribute("id")),
                             eElement.getAttribute("name"),
                             Float.parseFloat(eElement.getElementsByTagName("x").item(0).getTextContent()),
                             Float.parseFloat(eElement.getElementsByTagName("y").item(0).getTextContent()),
@@ -265,8 +151,8 @@ public final class Automato {
                     Element eElement = (Element) nNode;
 
                     Transicao transicao = new Transicao(
-                            eElement.getElementsByTagName("from").item(0).getTextContent(),
-                            eElement.getElementsByTagName("to").item(0).getTextContent(),
+                            parseInt(eElement.getElementsByTagName("from").item(0).getTextContent()),
+                            parseInt(eElement.getElementsByTagName("to").item(0).getTextContent()),
                             eElement.getElementsByTagName("read").item(0).getTextContent()
                     );
 

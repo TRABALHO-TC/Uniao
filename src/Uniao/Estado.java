@@ -11,13 +11,13 @@ package Uniao;
 public class Estado {
 
     private String nome;
-    private String id;
+    private int id;
     private float x;
     private float y;
     private boolean isFinal;
     private boolean isInicial;
 
-    Estado(String id, String nome, float x, float y, boolean isFinal, boolean isInicial) {
+    Estado(int id, String nome, float x, float y, boolean isFinal, boolean isInicial) {
         this.id = id;
         this.nome = nome;
         this.x = x;
@@ -50,11 +50,11 @@ public class Estado {
         this.nome = nome;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

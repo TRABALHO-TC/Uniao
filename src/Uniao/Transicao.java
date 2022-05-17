@@ -10,29 +10,29 @@ package Uniao;
  */
 public class Transicao {
 
-    private String to;
-    private String from;
+    private int to;
+    private int from;
     private String input;
 
-    public Transicao(String from, String to, String read) {
+    public Transicao(int from, int to, String read) {
         this.from = from;
         this.to = to;
         this.input = read;
     }
 
-    public String getTo() {
+    public int getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(int to) {
         this.to = to;
     }
 
-    public String getFrom() {
+    public int getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(int from) {
         this.from = from;
     }
 

@@ -168,7 +168,7 @@ public class OperacoesView extends javax.swing.JFrame {
 
             System.out.println("\n==================================================");
             CriarXML criar = new CriarXML();
-            criar.gerarXML(automato.unitWith(automato2)); // AQUI A EXPORTAÇÃO DO ARQUIVO
+            criar.gerarXML(automato.unir(automato, automato2)); // AQUI A EXPORTAÇÃO DO ARQUIVO
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(OperacoesView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {

@@ -8,7 +8,7 @@ import org.xml.sax.SAXException;
  * @author Janaina
  */
 public class Uniao {
-
+    
     public static void main(String[] args) throws ParserConfigurationException, SAXException {
         Automato automato = new Automato("automato.jff");
         Automato automato2 = new Automato("automato.jff");
@@ -17,8 +17,8 @@ public class Uniao {
 
         System.out.println("\n==================================================");
         CriarXML criar = new CriarXML();
-        criar.gerarXML(automato.unitWith(automato2)); // AQUI A EXPORTAÇÃO DO ARQUIVO
-
+        criar.gerarXML(automato.unir(automato, automato2)); // AQUI A EXPORTAÇÃO DO ARQUIVO
+        //criar.gerarXML(automato);
     }
 
 }
